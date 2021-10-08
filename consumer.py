@@ -8,18 +8,24 @@ from EventHandler import EventHandler
 from Wav import Wav
 
 def playWav(client, event: Wav):
-    RATE = 16000
-    with open('test.wav', 'w+b') as f:
+    RATE = 44100
+    CHUNK = 512
 
-        wav_fp = wave.open(f, 'wb')
-        wav_fp.setnchannels(1)
-        wav_fp.setsampwidth(pyaudio.get_sample_size(pyaudio.paInt16))
-        wav_fp.setframerate(RATE*1.3)
-        wav_fp.writeframes(b''.join(event.wav_blob))
-        wav_fp.close()
+    p = pyaudio.PyAudio()
 
+    stream = p.open(format=pyaudio.paInt16,
+                    channels=1,
+                    rate=RATE,
+                    input_device_index=3,
+                    output=True)
 
-    playsound('test.wav')
+    stream.write(b''.join(event.wav_blob))
+    #data = wf.readframes(CHUNK)
+
+    stream.stop_stream()
+    stream.close()
+
+    p.terminate()
 
 if __name__ == '__main__':
     eventHandler = EventHandler(Wav, playWav)

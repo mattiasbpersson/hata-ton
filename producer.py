@@ -18,8 +18,9 @@ def print_hi(name):
 
 def record_audio():
     _audio = pyaudio.PyAudio()
+    
     # prepare recording stream
-    RATE = 16000
+    RATE = 8000
     CHUNK = 1024
 
     # number of seconds to allow to establish threshold
@@ -42,8 +43,8 @@ def passiveListen(PERSONA):
     """
 
     THRESHOLD_MULTIPLIER = 1.8
-    RATE = 16000
-    CHUNK = 1024
+    RATE = 44100
+    CHUNK = 512
 
     # number of seconds to allow to establish threshold
     THRESHOLD_TIME = 1
@@ -56,6 +57,7 @@ def passiveListen(PERSONA):
                               channels=1,
                               rate=RATE,
                               input=True,
+                              input_device_index=2,
                               frames_per_buffer=CHUNK)
 
     # stores the audio data
@@ -125,6 +127,9 @@ def getScore(data):
     return score
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    p = pyaudio.PyAudio()
+    for i in range(p.get_device_count()):
+        print(p.get_device_info_by_index(i))
     while True:
         passiveListen("NILS")
 
