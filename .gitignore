@@ -1,0 +1,6 @@
+.idea
+venv
+microscripts.log*
+*.egg-info
+.DS_Store
+__pycache__
